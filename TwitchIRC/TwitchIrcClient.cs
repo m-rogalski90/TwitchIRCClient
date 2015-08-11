@@ -13,6 +13,10 @@ namespace TwitchIRC
 
         public Client(Connection connection, MessageHandler msgCallback)
         {
+            windows.popups.PopupConfig.Instance.Margin = 60;
+            windows.popups.PopupConfig.Instance.FramesPerSecond = 120; // still better than twitch or youtube ;D
+            windows.popups.PopupConfig.Instance.PixelsPerFrame = 2;
+
             m_Client = new IrcClient();
             m_Client.UseSsl = false;
             m_Client.ActiveChannelSyncing = true;
@@ -25,6 +29,7 @@ namespace TwitchIRC
             m_Client.OnErrorMessage += ErrorMessage;
             m_Client.OnChannelMessage += ChannelMessage;
             m_Client.OnRawMessage += RawMessage;
+            m_Client.OnError += Error;
         }
 
         /// <summary>
@@ -82,6 +87,11 @@ namespace TwitchIRC
         private void RawMessage(object sender, IrcEventArgs e)
         {
             // implement this later instead of channel and error messages
+        }
+
+        private void Error(object sender, ErrorEventArgs e)
+        {
+            // implement this method...
         }
     }
 }
