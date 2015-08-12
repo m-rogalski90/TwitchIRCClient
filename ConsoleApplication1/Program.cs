@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Threading;
 
-using TwitchIRC;
+using TwitchIRC.Core;
 
-namespace ConsoleApplication1
+namespace TwitchChatGame
 {
 
     class Program
     {
         private Thread m_IrcThread;
-        private Client m_Client;
+        private Irc m_Client;
         private QuizGame.QuizGame m_Game;
 
+        [STAThread]
         static void Main(string[] args)
         {
             new Program();
@@ -19,50 +20,31 @@ namespace ConsoleApplication1
         
         private Program()
         {
-            //FillTheDatabase();
-
-            Configuration conf = new Configuration();
-            conf.TryLoad();
-            m_Client = new Client(conf.IrcConnection, onMessage);
-            m_IrcThread = new Thread(() =>
-            {
-                m_Client.Initialize();
-                m_Client.Connect();
-            });
-            m_IrcThread.Start();
+            m_Client = new Irc();
+            m_Client.SetMessageHandler(onMessage);
+            m_Client.Connect();
             m_Game = new QuizGame.QuizGame(m_Client);
         }
 
-        private void onMessage(TwitchIRC.Message message)
+        private void onMessage(ChannelMessage message)
         {
             if (message is ChannelMessage)
             {
                 ChannelMessage chmsg = (ChannelMessage)message;
-                if (message.Content.StartsWith("!"))
+                if (message.Message.StartsWith("!"))
                     ParseCommand(chmsg);
 
-                Console.WriteLine(String.Format("[ {0} ] {1}", chmsg.From, chmsg.Content));
+                Console.WriteLine(String.Format("[ {0} ] {1}", chmsg.From, chmsg.Message));
             }
         }
 
         private void ParseCommand(ChannelMessage message)
         {
-            int idx = message.Content.IndexOf(' ');
-            string cmd = message.Content.Substring(0, (idx == -1 ? message.Content.Length : idx));
+            int idx = message.Message.IndexOf(' ');
+            string cmd = message.Message.Substring(0, (idx == -1 ? message.Message.Length : idx));
             string param = String.Empty;
             if(idx != -1)
-                param = message.Content.Substring(idx + 1, message.Content.Length - idx - 1);
-
-            m_Game.OnCommand(message.From, cmd, param);
+                param = message.Message.Substring(idx + 1, message.Message.Length - idx - 1);
         }
-
-        //private void FillTheDatabase()
-        //{
-        //    QuizGame.Database db = new QuizGame.Database();
-        //    db.Questions.Add(new QuizGame.Question()
-        //    {
-
-        //    });
-        //}
     }
 }

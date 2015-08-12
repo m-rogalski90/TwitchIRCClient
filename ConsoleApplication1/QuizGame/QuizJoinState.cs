@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApplication1.QuizGame
+namespace TwitchChatGame.QuizGame
 {
-    using ConsoleApplication1.Game;
+    using TwitchIRC.Core;
+    using TwitchIRC.Game;
     using System.Threading;
 
     internal class QuizJoinState : GameState
@@ -18,25 +19,8 @@ namespace ConsoleApplication1.QuizGame
         internal QuizJoinState(Game game) : base(game)
         {
             m_MaxPlayersCount = 10;
-            this.m_StateName = "Join";
+            m_StateName = "Join";
         }
-
-        public override bool AcceptCommand(string cmd)
-        {
-            if (m_StateCommands == null)
-                return false;
-
-            if (m_StateCommands.Any(c => c.Command == cmd))
-                return true;
-
-            return false;
-        }
-
-        public override void ExecuteCommand(bool player, string from, string cmd, string param = "")
-        {
-            m_StateCommands.First(c => c.Command == cmd).ExecuteCommand(from, param);
-        }
-
         public override void Start()
         {
             m_Parent.SendMessage(String.Format("Started {0} state.", m_StateName));
@@ -56,13 +40,10 @@ namespace ConsoleApplication1.QuizGame
 
         protected override void InitializeState()
         {
-            m_StateCommands = new StateCommand[]
-            {
-                new StateCommand(OnJoinCommand, "!join")
-            };
+            m_Parent.Client.AddCommand(new Command("!join", OnJoinCommand));
         }
 
-        private void OnJoinCommand(string from, string param = "")
+        private void OnJoinCommand(string from, string[] param)
         {
             m_Parent.AddPlayer(from);
             if (m_Parent.PlayersCount == m_MaxPlayersCount)

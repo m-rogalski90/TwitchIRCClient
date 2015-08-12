@@ -1,4 +1,4 @@
-﻿namespace ConsoleApplication1
+﻿namespace TwitchChatGame
 {
     partial class Database
     {

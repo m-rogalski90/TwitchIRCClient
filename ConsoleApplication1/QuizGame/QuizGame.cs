@@ -1,18 +1,23 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ConsoleApplication1.QuizGame
+namespace TwitchChatGame.QuizGame
 {
-    using ConsoleApplication1.Game;
-    using TwitchIRC;
+    using System.Threading.Tasks;
+    using TwitchIRC.Core;
+    using TwitchIRC.Game;
 
     internal class QuizGame : Game
     {
+        private String m_DatabaseFile = String.Format("{0}{1}data{1}database.xml",
+            Environment.CurrentDirectory, Path.DirectorySeparatorChar);
+
         private List<Question> m_Questions;
         protected Database m_Database;
 
-        public QuizGame(Client client) : base(client)
+        public QuizGame(Irc client) : base(client)
         {
             this.m_GameName = "Quiz";
         }
@@ -28,20 +33,48 @@ namespace ConsoleApplication1.QuizGame
             this.m_GameStates.Add(question_state);
             var end_state = new QuizEndState(this);
             this.m_GameStates.Add(end_state);
+
+            this.m_Client.AddCommand(new Command("!stats", onStatsCommand));
+            this.m_Client.AddCommand(new Command("!reset", onResetCommand));
+
+            m_Database = new Database();
+            if (File.Exists(m_DatabaseFile))
+                m_Database.ReadXml(m_DatabaseFile, System.Data.XmlReadMode.Auto /*which is the default :oo*/);
+
         }
 
-        public override void OnCommand(string from, string command, string param = "")
+        public void onResetCommand(string from, string[] param)
         {
-            if (m_CurrentState.AcceptCommand(command))
-                m_CurrentState.ExecuteCommand(m_Players.Any(p => p.Name == from), from, command, param);
+            SendMessage(String.Format("@{0}, NO!", from));
+        }
+
+        public void onStatsCommand(string from, string[] param)
+        {
+            Task t = new Task(() =>
+            {
+                if (!m_Database.Players.Any(p => p.PlayerName == from))
+                {
+                    SendMessage(String.Format("There is no player with @{0} nickname in our database.", from));
+                    return;
+                }
+                var all = m_Database.Players.OrderByDescending(p => p.PlayerPoints).ToList();
+                int place = all.IndexOf(m_Database.Players.First(p => p.PlayerName == from)) + 1;
+                int points = m_Database.Players.First(p => p.PlayerName == from).PlayerPoints;
+                SendMessage(String.Format("@{0} -> You have {1} points what gives you {2} place in the ranking.",
+                    from, points, place));
+            });
+            t.Start();
         }
 
         public override void StateEnded()
         {
-            SendMessage(String.Format("{0} game state has ended.",
-                m_CurrentState.StateName));
-            if(m_CurrentState.StateName == "Join")
+            int idx = m_GameStates.FindIndex(s => s.StateName == m_CurrentState.StateName);
+            idx++;
+            if (m_CurrentState.StateName == "Join")
             {
+                if (m_Players.Count <= 1)
+                    idx = 0;
+
                 // make this read from the file...
                 m_Questions = new List<Question>();
                 m_Questions.AddRange(new Question[3]
@@ -105,8 +138,6 @@ namespace ConsoleApplication1.QuizGame
             {
                 SaveDatabase();
             }
-            int idx = m_GameStates.FindIndex(s => s.StateName == m_CurrentState.StateName);
-            idx++;
             if (!SwitchToState(idx))
                 SwitchToState(0);
         }
@@ -138,9 +169,9 @@ namespace ConsoleApplication1.QuizGame
             return false;
         }
 
-        public override void SendMessage(string message)
+        public override void SendMessage(string message, int channel = 0)
         {
-            m_Client.SendMessage(message);
+            m_Client.SendMessage(channel, message);
         }
 
         public override void ResetPlayersCounter()
@@ -170,15 +201,19 @@ namespace ConsoleApplication1.QuizGame
 
         public void SaveDatabase()
         {
-            m_Database = new Database();
-            foreach(Player p in m_Players)
+            Task t = new Task(() =>
             {
-                if (!m_Database.Players.Any(pl => pl.PlayerName == p.Name))
-                    m_Database.Players.AddPlayersRow(p.Name, p.Points);
-                else
-                    m_Database.Players.First(pl => pl.PlayerName == p.Name).PlayerPoints += p.Points;
-            }
-            m_Database.AcceptChanges();
+                foreach (Player p in m_Players)
+                {
+                    if (!m_Database.Players.Any(pl => pl.PlayerName == p.Name))
+                        m_Database.Players.AddPlayersRow(p.Name, p.Points);
+                    else
+                        m_Database.Players.First(pl => pl.PlayerName == p.Name).PlayerPoints += p.Points;
+                }
+                m_Database.AcceptChanges();
+                m_Database.WriteXml(m_DatabaseFile);
+            });
+            t.Start();
         }
     }
 }

@@ -7,8 +7,8 @@
     <ProjectGuid>{18E3EA12-24D7-4A72-986E-9C6EB28EAA31}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleApplication1</RootNamespace>
-    <AssemblyName>ConsoleApplication1</AssemblyName>
+    <RootNamespace>TwitchChatGame</RootNamespace>
+    <AssemblyName>TwitchChatGame</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -52,10 +53,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Database.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Game\Game.cs" />
-    <Compile Include="Game\Player.cs" />
-    <Compile Include="Game\StateCommand.cs" />
-    <Compile Include="Game\GameState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuizGame\Question.cs" />
@@ -80,9 +77,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TwitchIRC\TwitchIRC.csproj">
+    <ProjectReference Include="..\TwitchIRC\MrgalskiTwitchIrc.csproj">
       <Project>{af9044f4-450f-4660-b173-2f3e97188e82}</Project>
-      <Name>TwitchIRC</Name>
+      <Name>MrgalskiTwitchIrc</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

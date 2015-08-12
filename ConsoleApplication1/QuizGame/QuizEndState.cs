@@ -4,26 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApplication1.QuizGame
+namespace TwitchChatGame.QuizGame
 {
-    using ConsoleApplication1.Game;
+    using TwitchIRC.Game;
 
     internal class QuizEndState : GameState
     {
         internal QuizEndState(Game game) : base(game)
         {
             this.m_StateName = "End";
-        }
-
-        public override bool AcceptCommand(string cmd)
-        {
-            return false;
-        }
-
-        // i could make something like Executecommand and ExecutePlayerCommand...
-        public override void ExecuteCommand(bool player, string from, string cmd, string param = "")
-        {
-
         }
 
         public override void Start()

@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchIRC", "TwitchIRC\TwitchIRC.csproj", "{AF9044F4-450F-4660-B173-2F3E97188E82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MrgalskiTwitchIrc", "TwitchIRC\MrgalskiTwitchIrc.csproj", "{AF9044F4-450F-4660-B173-2F3E97188E82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{18E3EA12-24D7-4A72-986E-9C6EB28EAA31}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchChat", "TwitchChat\TwitchChat.csproj", "{1D5BE0B8-A363-43C9-A83F-FA58EA92C1FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchChatGame", "ConsoleApplication1\TwitchChatGame.csproj", "{18E3EA12-24D7-4A72-986E-9C6EB28EAA31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{18E3EA12-24D7-4A72-986E-9C6EB28EAA31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18E3EA12-24D7-4A72-986E-9C6EB28EAA31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18E3EA12-24D7-4A72-986E-9C6EB28EAA31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1D5BE0B8-A363-43C9-A83F-FA58EA92C1FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D5BE0B8-A363-43C9-A83F-FA58EA92C1FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D5BE0B8-A363-43C9-A83F-FA58EA92C1FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D5BE0B8-A363-43C9-A83F-FA58EA92C1FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

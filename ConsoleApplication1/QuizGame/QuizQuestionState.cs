@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Threading;
 
-namespace ConsoleApplication1.QuizGame
+namespace TwitchChatGame.QuizGame
 {
-    using ConsoleApplication1.Game;
+    using TwitchIRC.Core;
+    using TwitchIRC.Game;
 
     internal class QuizQuestionState : GameState
     {
@@ -20,29 +21,11 @@ namespace ConsoleApplication1.QuizGame
         {
             this.m_CurrentQuestion = q;
         }
-
-        public override bool AcceptCommand(string cmd)
-        {
-            if (m_StateCommands == null)
-                return false;
-
-            if (m_StateCommands.Any(c => c.Command == cmd))
-                return true;
-
-            return false;
-        }
-
-        public override void ExecuteCommand(bool player, string from, string cmd, string param = "")
-        {
-            if (player)
-                m_StateCommands.First(c => c.Command == cmd).ExecuteCommand(from, param);
-        }
-
         public override void Start()
         {
             /// have to make it a little bit different
             m_Parent.SendMessage("Q: " + m_CurrentQuestion.Content);
-            int rand = new Random().Next(0, 3);
+            int rand = new Random().Next() % 4;
             m_CurrentQuestion.Answers[rand] = m_CurrentQuestion.Correct;
             m_Parent.SendMessage("a) " + m_CurrentQuestion.Answers[0]);
             m_Parent.SendMessage("b) " + m_CurrentQuestion.Answers[1]);
@@ -63,24 +46,21 @@ namespace ConsoleApplication1.QuizGame
 
         protected override void InitializeState()
         {
-            m_StateCommands = new StateCommand[]
-            {
-                new StateCommand(OnAnswerCommand, "!answer")
-            };
+            m_Parent.Client.AddCommand(new Command("!answer", OnAnswerCommand));
         }
 
-        private void OnAnswerCommand(string from, string param)
+        private void OnAnswerCommand(string from, string[] param = null)
         {
             lock(new object())
             {
-                if (string.IsNullOrEmpty(param))
+                if (param == null)
                 {
                     m_Parent.SendMessage("@{0} you have to specify the answer. example: !answer a");
                     return;
                 }
                 else
                 {
-                    int answer_id = param.ToLower()[0] - 97;
+                    int answer_id = param[0].ToLower()[0] - 97;
                     if(answer_id < 0 || answer_id >= m_CurrentQuestion.Answers.Length)
                     {
                         m_Parent.SendMessage(String.Format("Wrong @{0}! That was not the correct answer. Please try again.",
@@ -92,8 +72,8 @@ namespace ConsoleApplication1.QuizGame
                         m_QuestionTimerThread.Abort();
                         m_Parent.SendMessage(String.Format("Congratulations @{0}! That was the correct answer. You have been rewarded with {1} points.",
                             from, m_CurrentQuestion.Points));
-                        m_Parent.StateEnded();
                         m_Parent.AddPlayerPoints(from, m_CurrentQuestion.Points);
+                        m_Parent.StateEnded();
                     }
                     else
                     {

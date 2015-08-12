@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApplication1.QuizGame
+namespace TwitchChatGame.QuizGame
 {
-    using ConsoleApplication1.Game;
+    using TwitchIRC.Game;
     using System.Threading;
 
     internal class QuizIdleState : GameState
@@ -19,11 +19,6 @@ namespace ConsoleApplication1.QuizGame
         internal QuizIdleState(Game game) : base(game)
         {
             this.m_StateName = "Idle";
-        }
-
-        public override void ExecuteCommand(bool player, string from, string cmd, string param = "")
-        {
-            //unused in this state
         }
 
         public override void Start()
@@ -41,11 +36,6 @@ namespace ConsoleApplication1.QuizGame
         public override void Stop()
         {
 
-        }
-
-        public override bool AcceptCommand(string cmd)
-        {
-            return false;
         }
 
         protected override void InitializeState()
