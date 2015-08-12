@@ -5,7 +5,6 @@ namespace TwitchIRC.Game
 {
     public abstract class GameState
     {
-        protected Command[] m_StateCommands;
         protected String m_StateName;
         protected Game m_Parent;
 
@@ -23,7 +22,5 @@ namespace TwitchIRC.Game
         protected abstract void InitializeState();
         public abstract void Start();
         public abstract void Stop();
-        public abstract bool AcceptCommand(String cmd);
-        public abstract void ExecuteCommand(Boolean player, String from, String cmd, String param = "");
     }
 }

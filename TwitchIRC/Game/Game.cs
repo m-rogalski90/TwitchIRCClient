@@ -11,7 +11,6 @@ namespace TwitchIRC.Game
         public GameStateChangedHandler GameStateChanged;
 
         protected List<Player> m_Players;
-        protected List<Command> m_Commands;
 
         public List<GameState> m_GameStates;
 
@@ -24,11 +23,15 @@ namespace TwitchIRC.Game
             get { return m_Players.Count; }
         }
 
+        public Irc Client
+        {
+            get { return m_Client; }
+        }
+
         public Game(Irc client)
         {
             this.m_Client = client;
             this.m_GameStates = new List<GameState>();
-            this.m_Commands = new List<Command>();
             InitializeGame();
             if (m_GameStates.Count > 0)
             {
@@ -38,9 +41,8 @@ namespace TwitchIRC.Game
         }
 
         protected abstract void InitializeGame();
-        public abstract void SendMessage(String message);
+        public abstract void SendMessage(String message, int channel = 0);
         public abstract bool SwitchToState(int idx);
-        public abstract void OnCommand(String from, String command, String param = "");
         public abstract void StateEnded();
         public abstract void ResetPlayersCounter();
         public abstract void AddPlayer(String name, Int32 max = 10);

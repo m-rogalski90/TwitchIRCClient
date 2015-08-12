@@ -11,12 +11,14 @@ namespace TwitchIRC.Core
 
     public class Irc
     {
+        #region MEMBER FIELDS
         private IrcClient m_IrcClient;
         private MessageHandler m_MessageHandler;
         private ErrorHandler m_ErrorHandler;
         private ConnectionDetails m_ConnectionDetails;
         private List<Command> m_Commands;
         private Thread m_ConnectionThread;
+        #endregion
 
         /// <summary>
         /// Creates a new instance of Irc client and
@@ -71,16 +73,16 @@ namespace TwitchIRC.Core
         /// </summary>
         public void Connect()
         {
-            if (m_ConnectionDetails == null)
-                throw new Exception("No connection details was set.");
-            m_ConnectionThread = new Thread(() =>
-            {
+            //if (m_ConnectionDetails == null)
+            //    throw new Exception("No connection details was set.");
+            //m_ConnectionThread = new Thread(() =>
+            //{
                 m_IrcClient.Connect("", 0);
                 m_IrcClient.Login("nick", "realname", 0, "username", "password");
                 m_IrcClient.RfcJoin("channel");
                 m_IrcClient.Listen(false);
-            });
-            m_ConnectionThread.Start();
+            //});
+            //m_ConnectionThread.Start();
         }
         
         /// <summary>
@@ -137,14 +139,30 @@ namespace TwitchIRC.Core
             }
             return false;
         }
+        
+        public void SendMessage(string p1)
+        {
+            m_IrcClient.SendMessage(SendType.Message, m_IrcClient.JoinedChannels[0], p2);
+        }
 
+        public void SendMessage(int p1, string p2)
+        {
+            m_IrcClient.SendMessage(SendType.Message, m_IrcClient.JoinedChannels[p1], p2);
+        }
+
+        public void SendMessageTo(string p1, string p2)
+        {
+            m_IrcClient.SendMessage(SendType.Message, p1, p2);
+        }
+
+        #region PRIVATE HANDLERS
         private void OnMessage(object sender, IrcEventArgs e)
         {
             MessageBase message = null;
+            //check if it's a command...
             switch(e.Data.Type)
             {
                 case ReceiveType.ChannelMessage:
-                    // check if it's a command
                     message = new ChannelMessage();
                     ((ChannelMessage)message).From = e.Data.From;
                     ((ChannelMessage)message).Message = e.Data.Message;
@@ -165,5 +183,6 @@ namespace TwitchIRC.Core
         {
             m_ErrorHandler(e.ErrorMessage);
         }
+        #endregion
     }
 }

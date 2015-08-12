@@ -78,7 +78,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WebApi\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Windows\resources\theme_bl.png" />
     <Resource Include="Windows\resources\theme_gr.png" />
