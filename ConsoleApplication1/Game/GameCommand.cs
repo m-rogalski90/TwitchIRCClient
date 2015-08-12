@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TwitchIRC.Game
+namespace TwitchChatGame.Game
 {
-    public delegate void CommandActionHandler(String from, String param = "");
+    public delegate void GameCommandActionHandler(String from, String param);
 
-    public class StateCommand : Command
+    public class GameCommand : Command
     {
         protected String m_From;
         protected String m_Param;
-        protected CommandActionHandler m_CommandAction;
-        
+        protected GameCommandActionHandler m_CommandAction;
+
         public String From
         {
             get { return m_From; }
@@ -23,7 +23,7 @@ namespace TwitchIRC.Game
             get { return m_Param; }
         }
 
-        public StateCommand(CommandActionHandler cmdAction, String cmd, String param = "") : base(cmd)
+        public GameCommand(GameCommandActionHandler cmdAction, String cmd, String param = "") : base(cmd)
         {
             m_CommandAction = cmdAction;
             m_Param = param;

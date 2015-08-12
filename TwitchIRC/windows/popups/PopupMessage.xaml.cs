@@ -33,7 +33,6 @@ namespace TwitchIRC.windows.popups
         private int frame_delay;
 
         private double m_TopOffset;
-        private bool is_there;
         private Timer m_Timer;
         
         private PopupState mPopupState;
@@ -41,7 +40,7 @@ namespace TwitchIRC.windows.popups
         // if this shit will work ... 
         public PopupMessage(string from, string content)
         {
-            InitializeComponent();
+            InitializeComponent(); // fuck this microsoft -.-
 
             this.m_From.Text = from;
             this.m_Content.Text = content;
@@ -78,44 +77,55 @@ namespace TwitchIRC.windows.popups
 
         private void onNewFrame(object state)
         {
-            if(this.PopupMessageWindow.Top < m_TopOffset)
+            lineUp();
+            switch (mPopupState)
+            {
+                case PopupState.slide:      onSlideStateFrame();        break;                    
+                case PopupState.display:    onDisplayStateFrame();      break;
+                case PopupState.die:        onDieStateFrame();          break;
+            }
+        }
+        
+        private void lineUp()
+        {
+            if (this.PopupMessageWindow.Top < m_TopOffset)
             {
                 this.PopupMessageWindow.Top += PopupConfig.Instance.PixelsPerFrame;
                 if (this.PopupMessageWindow.Top > m_TopOffset)
                     this.PopupMessageWindow.Top = m_TopOffset;
             }
-            else if(this.PopupMessageWindow.Top > m_TopOffset)
+            else if (this.PopupMessageWindow.Top > m_TopOffset)
             {
                 this.PopupMessageWindow.Top -= PopupConfig.Instance.PixelsPerFrame;
                 if (this.PopupMessageWindow.Top < m_TopOffset)
                     this.PopupMessageWindow.Top = m_TopOffset;
             }
+        }
 
-            switch (mPopupState)
+        private void onSlideStateFrame()
+        {
+            this.PopupMessageWindow.Left += PopupConfig.Instance.PixelsPerFrame;
+            if (this.PopupMessageWindow.Left > PopupConfig.Instance.Margin)
             {
-                case PopupState.slide:
-                    this.PopupMessageWindow.Left += PopupConfig.Instance.PixelsPerFrame;
-                    if (this.PopupMessageWindow.Left > PopupConfig.Instance.Margin)
-                    {
-                        this.PopupMessageWindow.Left = PopupConfig.Instance.Margin;
-                        mPopupState = PopupState.display;
-                    }
-                    break;
-
-                case PopupState.display:
-                    display_interval -= frame_delay;
-                    if (display_interval <= 0)
-                        mPopupState = PopupState.die;
-                    break;
-
-                case PopupState.die:
-                    this.PopupMessageWindow.Opacity -= display_interval;
-                    if (display_interval <= 0)
-                        this.Close();
-                    break;
+                this.PopupMessageWindow.Left = PopupConfig.Instance.Margin;
+                mPopupState = PopupState.display;
             }
         }
-        
+
+        private void onDisplayStateFrame()
+        {
+            display_interval -= frame_delay;
+            if (display_interval <= 0)
+                mPopupState = PopupState.die;
+        }
+
+        private void onDieStateFrame()
+        {
+            this.PopupMessageWindow.Opacity -= display_interval;
+            if (this.PopupMessageWindow.Opacity <= 0)
+                this.Close();
+        }
+
         private void onMouseEnterClose(object sender, MouseEventArgs e)
         {
             m_Close.Foreground = Brushes.Red;

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TwitchIRC.Core;
 
 namespace TwitchIRC.Game
 {
     public abstract class GameState
     {
-        protected StateCommand[] m_StateCommands;
+        protected Command[] m_StateCommands;
         protected String m_StateName;
         protected Game m_Parent;
 

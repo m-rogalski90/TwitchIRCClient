@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using TwitchIRC;
+using TwitchIRC.Core;
 
 namespace TwitchIRC.Game
 {
@@ -12,24 +11,24 @@ namespace TwitchIRC.Game
         public GameStateChangedHandler GameStateChanged;
 
         protected List<Player> m_Players;
-        protected List<GameCommand> m_Commands;
+        protected List<Command> m_Commands;
 
         public List<GameState> m_GameStates;
 
         protected GameState m_CurrentState;
         protected String m_GameName;
-        protected Client m_Client;
+        protected Irc m_Client;
 
         public Int32 PlayersCount
         {
             get { return m_Players.Count; }
         }
 
-        public Game(Client client)
+        public Game(Irc client)
         {
             this.m_Client = client;
             this.m_GameStates = new List<GameState>();
-            this.m_Commands = new List<GameCommand>();
+            this.m_Commands = new List<Command>();
             InitializeGame();
             if (m_GameStates.Count > 0)
             {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TwitchIRC.Game
+namespace TwitchChatGame.Game
 {
     public abstract class Command
     {
