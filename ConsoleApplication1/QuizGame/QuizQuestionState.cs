@@ -23,7 +23,7 @@ namespace TwitchChatGame.QuizGame
         }
         public override void Start()
         {
-            /// have to make it a little bit different
+            m_Parent.Client.AddCommand(new Command("!answer", OnAnswerCommand));
             m_Parent.SendMessage("Q: " + m_CurrentQuestion.Content);
             int rand = new Random().Next() % 4;
             m_CurrentQuestion.Answers[rand] = m_CurrentQuestion.Correct;
@@ -41,12 +41,11 @@ namespace TwitchChatGame.QuizGame
 
         public override void Stop()
         {
-
+            m_Parent.Client.RemoveCommand("!answer");
         }
 
         protected override void InitializeState()
         {
-            m_Parent.Client.AddCommand(new Command("!answer", OnAnswerCommand));
         }
 
         private void OnAnswerCommand(string from, string[] param = null)
@@ -60,25 +59,28 @@ namespace TwitchChatGame.QuizGame
                 }
                 else
                 {
-                    int answer_id = param[0].ToLower()[0] - 97;
-                    if(answer_id < 0 || answer_id >= m_CurrentQuestion.Answers.Length)
+                    if (!String.IsNullOrEmpty(param[0]))
                     {
-                        m_Parent.SendMessage(String.Format("Wrong @{0}! That was not the correct answer. Please try again.",
-                            from));
-                        return;
-                    }
-                    else if (m_CurrentQuestion.Answers[answer_id] == m_CurrentQuestion.Correct)
-                    {
-                        m_QuestionTimerThread.Abort();
-                        m_Parent.SendMessage(String.Format("Congratulations @{0}! That was the correct answer. You have been rewarded with {1} points.",
-                            from, m_CurrentQuestion.Points));
-                        m_Parent.AddPlayerPoints(from, m_CurrentQuestion.Points);
-                        m_Parent.StateEnded();
-                    }
-                    else
-                    {
-                        m_Parent.SendMessage(String.Format("Wrong @{0}! That was not the correct answer. Please try again.",
-                            from));
+                        int answer_id = param[0].ToLower()[0] - 97;
+                        if (answer_id < 0 || answer_id >= m_CurrentQuestion.Answers.Length)
+                        {
+                            m_Parent.SendMessage(String.Format("Wrong @{0}! That was not the correct answer. Please try again.",
+                                from));
+                            return;
+                        }
+                        else if (m_CurrentQuestion.Answers[answer_id] == m_CurrentQuestion.Correct)
+                        {
+                            m_QuestionTimerThread.Abort();
+                            m_Parent.SendMessage(String.Format("Congratulations @{0}! That was the correct answer. You have been rewarded with {1} points.",
+                                from, m_CurrentQuestion.Points));
+                            m_Parent.AddPlayerPoints(from, m_CurrentQuestion.Points);
+                            m_Parent.StateEnded();
+                        }
+                        else
+                        {
+                            m_Parent.SendMessage(String.Format("Wrong @{0}! That was not the correct answer. Please try again.",
+                                from));
+                        }
                     }
                 }
             }

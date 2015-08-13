@@ -23,6 +23,7 @@ namespace TwitchChatGame.QuizGame
         }
         public override void Start()
         {
+            m_Parent.Client.AddCommand(new Command("!join", OnJoinCommand));
             m_Parent.SendMessage(String.Format("Started {0} state.", m_StateName));
             m_Parent.ResetPlayersCounter();
             m_WaitingTimer = new Thread(() =>
@@ -35,12 +36,11 @@ namespace TwitchChatGame.QuizGame
 
         public override void Stop()
         {
-
+            m_Parent.Client.RemoveCommand("!join");
         }
 
         protected override void InitializeState()
         {
-            m_Parent.Client.AddCommand(new Command("!join", OnJoinCommand));
         }
 
         private void OnJoinCommand(string from, string[] param)

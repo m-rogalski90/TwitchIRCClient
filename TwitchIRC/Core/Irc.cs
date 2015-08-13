@@ -134,6 +134,21 @@ namespace TwitchIRC.Core
             return false;
         }
         
+        public bool RemoveCommand(String p1)
+        {
+            if (m_Commands == null)
+                throw new Exception("Commands list was not initialized.... Report as a bug.");
+
+            bool exists = m_Commands.Any(cmd => cmd.IsCommand(p1));
+            if(exists)
+            {
+                var _ = m_Commands.First(cmd => cmd.IsCommand(p1));
+                m_Commands.Remove(_);
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Used to send a message on to the default channel
         /// </summary>
@@ -173,11 +188,16 @@ namespace TwitchIRC.Core
             List<string> params_ = new List<string>();
             params_.AddRange(data.Message.Split(' '));
             params_.RemoveAt(0);
-            m_Commands.First(cmd => data.Message.StartsWith(cmd.Cmd)).Execute(data.From, params_.ToArray());
+            for(int i = 0; i <params_.Count; i++)
+                Console.WriteLine(params_[i]);
+            m_Commands.First(cmd => data.Message.StartsWith(cmd.Cmd)).Execute(data.Nick, (params_.Count == 0 ? null : params_.ToArray()));
         }
 
         private void ProcessChannelMessage(IrcMessageData data)
         {
+            if (m_ChannelMessageHandler == null)
+                return;
+
             ChannelMessage message = new ChannelMessage()
             {
                 From = data.Nick,
@@ -188,6 +208,9 @@ namespace TwitchIRC.Core
 
         private void ProcessErrorMessage(IrcMessageData data)
         {
+            if (m_ErrorMessageHandler == null)
+                return;
+
             ErrorMessage message = new ErrorMessage()
             {
                 Message = data.Message
@@ -214,6 +237,9 @@ namespace TwitchIRC.Core
 
         private void OnError(object sender, ErrorEventArgs e)
         {
+            if (m_ErrorHandler == null)
+                return;
+
             m_ErrorHandler(e.ErrorMessage);
         }
         #endregion

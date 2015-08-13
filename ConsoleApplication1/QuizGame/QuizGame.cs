@@ -72,13 +72,14 @@ namespace TwitchChatGame.QuizGame
             idx++;
             if (m_CurrentState.StateName == "Join")
             {
-                if (m_Players.Count <= 1)
+                if (m_Players.Count < 1)
                     idx = 0;
-
-                // make this read from the file...
-                m_Questions = new List<Question>();
-                m_Questions.AddRange(new Question[3]
+                else
                 {
+                    // make this read from the file...
+                    m_Questions = new List<Question>();
+                    m_Questions.AddRange(new Question[3]
+                    {
                     new Question()
                     {
                         Points = 5,
@@ -120,7 +121,8 @@ namespace TwitchChatGame.QuizGame
                         AnswerTime = 60,
                         Content = "pick the correct answer 3!"
                     }
-                });
+                    });
+                }
             }
             if(m_CurrentState.StateName == "Question")
             {

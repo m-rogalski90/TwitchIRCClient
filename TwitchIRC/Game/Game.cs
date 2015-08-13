@@ -30,8 +30,8 @@ namespace TwitchIRC.Game
 
         public Game(Irc client)
         {
-            this.m_Client = client;
-            this.m_GameStates = new List<GameState>();
+            m_Client = client;
+            m_GameStates = new List<GameState>();
             InitializeGame();
             if (m_GameStates.Count > 0)
             {

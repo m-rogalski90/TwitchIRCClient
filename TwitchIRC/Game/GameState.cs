@@ -1,5 +1,4 @@
 ﻿using System;
-using TwitchIRC.Core;
 
 namespace TwitchIRC.Game
 {
