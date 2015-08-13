@@ -171,7 +171,7 @@ namespace TwitchChatGame.QuizGame
 
         public override void SendMessage(string message, int channel = 0)
         {
-            m_Client.SendMessage(channel, message);
+            m_Client.SendMessage(message);
         }
 
         public override void ResetPlayersCounter()
