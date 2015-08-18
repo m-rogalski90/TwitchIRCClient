@@ -26,6 +26,16 @@ namespace TwitchChatGame
             m_Client.SetConnectionDetails(condetails);
             m_Client.SetChannelMessageHandler(onMessage);
             m_Client.Connect();
+            ConnectionDetails cd = new ConnectionDetails();
+            cd.ReadConfigFile();
+            // this will break...
+            TwitchIRC.WebApi.WebApiRequest.Instance.SetChannelDetails("mrgalski", cd.Password, new TwitchIRC.WebApi.Channels.Channel()
+            {
+                status = "test from the API",
+                delay = 0,
+                game = "Programming"
+            });
+            TwitchIRC.WebApi.WebApiRequest.Instance.GetChannelInfo(cd.Password);
         }
 
         private void onMessage(ChannelMessage message)
