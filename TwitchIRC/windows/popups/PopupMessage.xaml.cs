@@ -36,8 +36,12 @@ namespace TwitchIRC.windows.popups
         private Timer m_Timer;
         
         private PopupState mPopupState;
-
-        // if this shit will work ... 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="content"></param>
         public PopupMessage(string from, string content)
         {
             InitializeComponent(); // fuck this microsoft -.-

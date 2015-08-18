@@ -55,12 +55,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuizGame\Question.cs" />
-    <Compile Include="QuizGame\QuizEndState.cs" />
-    <Compile Include="QuizGame\QuizGame.cs" />
-    <Compile Include="QuizGame\QuizIdleState.cs" />
-    <Compile Include="QuizGame\QuizJoinState.cs" />
-    <Compile Include="QuizGame\QuizQuestionState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

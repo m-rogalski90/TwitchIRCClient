@@ -3,6 +3,11 @@
 namespace TwitchIRC.Core
 {
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="params_"></param>
     public delegate void CommandActionHandler(String from, String[] params_);
 
     /// <summary>

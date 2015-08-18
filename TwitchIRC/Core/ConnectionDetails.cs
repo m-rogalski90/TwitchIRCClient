@@ -21,18 +21,44 @@ namespace TwitchIRC.Core
         private Int32 m_Usermode;
         private String m_Username;
         private String m_Password;
-        private List<String> m_Channels; // no C++ ... 
+        private List<String> m_Channels;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public String Address { get { return m_Address; } set { m_Address = value; } }
+        /// <summary>
+        /// 
+        /// </summary>
         public Int32 Port { get { return m_Port; } set { m_Port = value; } }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public String Nickname { get { return m_Nickname; } set { m_Nickname = value; } }
+        /// <summary>
+        /// 
+        /// </summary>
         public String Realname { get { return m_Realname; } set { m_Realname = value; } }
+        /// <summary>
+        /// 
+        /// </summary>
         public Int32 Usermode { get { return m_Usermode; }  set { m_Usermode = value; } }
+        /// <summary>
+        /// 
+        /// </summary>
         public String Username { get { return m_Username; } set { m_Username = value; } }
+        /// <summary>
+        /// 
+        /// </summary>
         public String Password { get { return m_Password; } set { m_Password = value; } }
+        /// <summary>
+        /// 
+        /// </summary>
         public List<String> Channels { get { return m_Channels; } set { m_Channels = value; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ConnectionDetails()
         {
             m_Channels = new List<String>();
@@ -41,11 +67,18 @@ namespace TwitchIRC.Core
                 Environment.CurrentDirectory, Path.DirectorySeparatorChar);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p1"></param>
         public void SetConfigFilePath(string p1)
         {
             m_ConfigFilePath = p1;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void ReadConfigFile()
         {
             if (!File.Exists(m_ConfigFilePath))

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TwitchIRC.windows.popups
 {
-    class PopupConfig
+    public class PopupConfig
     {
         private static PopupConfig m_Instance;
         internal static PopupConfig Instance

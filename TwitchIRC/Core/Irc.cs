@@ -6,10 +6,27 @@ using System.Threading;
 
 namespace TwitchIRC.Core
 {
+    /// <summary>
+    /// Callback to the method that will handle the ChannelMessage
+    /// </summary>
+    /// <param name="message">Channel message object that was sent to the channel</param>
     public delegate void ChannelMessageHandler(ChannelMessage message);
+
+    /// <summary>
+    /// Callback to the method that will handle the ErrorMessage
+    /// </summary>
+    /// <param name="message">Error message object that was sent to the chat</param>
     public delegate void ErrorMessagehandler(ErrorMessage message);
+
+    /// <summary>
+    /// Callback to the method that will handle all the other error types.
+    /// </summary>
+    /// <param name="error">String with the error message</param>
     public delegate void ErrorHandler(String error);
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Irc
     {
         #region CALLBACKS/HANDLERS
@@ -134,6 +151,11 @@ namespace TwitchIRC.Core
             return false;
         }
         
+        /// <summary>
+        /// Removes the command from the commands list by the command name
+        /// </summary>
+        /// <param name="p1">Name of the command that you want to remove</param>
+        /// <returns></returns>
         public bool RemoveCommand(String p1)
         {
             if (m_Commands == null)

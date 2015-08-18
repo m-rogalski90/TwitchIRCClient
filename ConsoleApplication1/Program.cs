@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using TwitchIRC.Core;
 
 namespace TwitchChatGame
@@ -11,7 +10,6 @@ namespace TwitchChatGame
     class Program
     {
         private Irc m_Client;
-        private QuizGame.QuizGame m_Game;
 
         [STAThread]
         static void Main(string[] args)
@@ -28,7 +26,6 @@ namespace TwitchChatGame
             m_Client.SetConnectionDetails(condetails);
             m_Client.SetChannelMessageHandler(onMessage);
             m_Client.Connect();
-            m_Game = new QuizGame.QuizGame(m_Client);
         }
 
         private void onMessage(ChannelMessage message)
